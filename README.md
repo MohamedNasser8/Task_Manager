@@ -29,7 +29,7 @@ To get a local copy up and running follow these simple steps.
 2. **React Application**:
     - Change directory to the React app's pipeline:
       ```
-      cd pipeline/reactapp
+      cd front
       ```
     - Install the necessary npm packages:
       ```
