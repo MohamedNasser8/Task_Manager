@@ -81,3 +81,5 @@ Once both the Spring Boot and React applications are running, you can create, up
 ![Main Page](images/added_task.png)
 
 - **Figure 4:** The main page displays all tasks. Tasks synced with Google Calendar are highlighted in green, while unsynced tasks are shown in red.
+
+![Main Page](images/task_not_synced.png)
