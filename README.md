@@ -3,7 +3,7 @@ A web application built using React and Spring Boot for managing tasks. Users ca
 
 ## Installation
 1. Clone this repository:
-   `git clone https://github.com/your-username/task-manager-app.git` 
+   `git clone https://github.com/MohamedNasser8/Task_Manager` 
 2. cd task-manager
 
 ## Getting Started
