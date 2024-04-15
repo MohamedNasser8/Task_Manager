@@ -33,12 +33,25 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     GoogleService googleService;
 
-    public Task mapTaskRequestToTask(Map<String, String> requestMap, Task newTask){
+    public Task mapTaskRequestToTask(Map<String, String> requestMap, Task newTask) {
         newTask.setLastUpdated(LocalDateTime.now());
-        newTask.setStartDate(getFormattedDateTime(requestMap.get("day"),requestMap.get("startHour").substring(0,5)));
-        newTask.setDueDate(getFormattedDateTime(requestMap.get("day"),requestMap.get("endHour").substring(0,5)));
-        newTask.setDescription(requestMap.get("description"));
-        newTask.setTitle(requestMap.get("title"));
+        String day = requestMap.get("day");
+        String startHour = requestMap.get("startHour");
+        if (day != null && startHour != null) {
+            newTask.setStartDate(getFormattedDateTime(day, startHour.substring(0, 5)));
+        }
+        String endHour = requestMap.get("endHour");
+        if (day != null && endHour != null) {
+            newTask.setDueDate(getFormattedDateTime(day, endHour.substring(0, 5)));
+        }
+        String description = requestMap.get("description");
+        if (description != null) {
+            newTask.setDescription(description);
+        }
+        String title = requestMap.get("title");
+        if (title != null) {
+            newTask.setTitle(title);
+        }
         return newTask;
     }
 
@@ -58,7 +71,7 @@ public class TaskServiceImpl implements TaskService {
         log.info("Inside create task");
         try {
 //            Creates a new Task object.
-            Task newTask =mapTaskRequestToTask(requestMap, new Task());
+            Task newTask = mapTaskRequestToTask(requestMap, new Task());
 
 //            If the user is not found, a new user is created and saved.
             Optional<User> userOptional = userRep.findByEmail(requestMap.get("email"));
@@ -75,11 +88,11 @@ public class TaskServiceImpl implements TaskService {
                     user.getToken().setExpiresAt(3599);
                     user.getToken().setAccessToken(newAccessToken);
                     userRep.save(user);
-                }else{
+                } else {
                     try {
 //                        add the new task to the user's Google Calendar
                         googleService.addEventToCalendar(user.getToken().getAccessToken(), newTask);
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         newTask.setSynced(false);
                     }
                 }
@@ -123,7 +136,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    @CacheEvict(cacheNames = "all_tasks",allEntries = true)
+    @CacheEvict(cacheNames = "all_tasks", allEntries = true)
     @Cacheable(cacheNames = "update_tasks")
     public ResponseEntity<String> updateTask(Long taskId, Map<String, String> requestMap) {
         log.info("Inside update task");
